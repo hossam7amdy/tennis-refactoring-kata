@@ -7,6 +7,8 @@ enum Score {
   "Forty",
 }
 
+const deuceScores = ["Love-All", "Fifteen-All", "Thirty-All", "Deuce"];
+
 export class TennisGame1 implements TennisGame {
   private m_score1: number = 0;
   private m_score2: number = 0;
@@ -26,20 +28,7 @@ export class TennisGame1 implements TennisGame {
   getScore(): string {
     let score: string = "";
     if (this.m_score1 === this.m_score2) {
-      switch (this.m_score1) {
-        case 0:
-          score = "Love-All";
-          break;
-        case 1:
-          score = "Fifteen-All";
-          break;
-        case 2:
-          score = "Thirty-All";
-          break;
-        default:
-          score = "Deuce";
-          break;
-      }
+      score = this.getDeuceScore(this.m_score1);
     } else if (this.m_score1 >= 4 || this.m_score2 >= 4) {
       const minusResult: number = this.m_score1 - this.m_score2;
       if (minusResult === 1) score = "Advantage player1";
@@ -56,5 +45,9 @@ export class TennisGame1 implements TennisGame {
     const player1Score = Score[this.m_score1];
     const player2Score = Score[this.m_score2];
     return `${player1Score}-${player2Score}`;
+  }
+
+  private getDeuceScore(score: number): string {
+    return deuceScores[score] ?? deuceScores.at(-1);
   }
 }
