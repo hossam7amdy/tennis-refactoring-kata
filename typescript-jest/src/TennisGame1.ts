@@ -30,11 +30,7 @@ export class TennisGame1 implements TennisGame {
     if (this.m_score1 === this.m_score2) {
       score = this.getDeuceScore(this.m_score1);
     } else if (this.m_score1 >= 4 || this.m_score2 >= 4) {
-      const minusResult: number = this.m_score1 - this.m_score2;
-      if (minusResult === 1) score = "Advantage player1";
-      else if (minusResult === -1) score = "Advantage player2";
-      else if (minusResult >= 2) score = "Win for player1";
-      else score = "Win for player2";
+      score = this.getAdvantageOrWinningScore();
     } else {
       score = this.getCurrentScore();
     }
@@ -49,5 +45,34 @@ export class TennisGame1 implements TennisGame {
 
   private getDeuceScore(score: number): string {
     return deuceScores[score] ?? deuceScores.at(-1);
+  }
+
+  private getAdvantageOrWinningScore(): string {
+    let score: string = "";
+    const minusResult = this.calcScoreDiff();
+
+    if (minusResult === 1) {
+      score = this.getAdvantage(this.player1Name);
+    } else if (minusResult === -1) {
+      score = this.getAdvantage(this.player2Name);
+    } else if (minusResult >= 2) {
+      score = this.getWinning(this.player1Name);
+    } else {
+      score = this.getWinning(this.player2Name);
+    }
+
+    return score;
+  }
+
+  private calcScoreDiff(): number {
+    return this.m_score1 - this.m_score2;
+  }
+
+  private getAdvantage(playerName: string): string {
+    return `Advantage ${playerName}`;
+  }
+
+  private getWinning(playerName: string): string {
+    return `Win for ${playerName}`;
   }
 }
